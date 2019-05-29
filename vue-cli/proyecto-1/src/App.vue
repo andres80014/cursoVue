@@ -1,16 +1,19 @@
 <template>
-  <div id="app">
-    <HelloWorld msg="Vue.js App"/>
+  <div id="app" class="container">
+    <cabecera></cabecera>
+    <listado></listado>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Cabecera from './components/Cabecera.vue'
+import Listado from './components/Listado.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    cabecera : Cabecera,
+    listado  : Listado
   }
 }
 </script>

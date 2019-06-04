@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex@3.1.1/dist/vuex.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>VUE.JS</title>
+</head>
+<body>
+    <div id="app" class="container">
+        <padre></padre>
+    </div>
+    
+    <script>
+        Vue.component('padre',{
+            template : `
+            <div>
+                <h2>Numero Padre{{ numero }}</h2>
+                
+                <hijo></hijo>
+
+                <ul  v-for="persona of listaPersonas">
+                    <li>{{ persona.nombre }}</li>
+                </ul>
+            </div>`,
+            computed: {
+                ...Vuex.mapState(['numero','listaPersonas']),
+                /*
+                numero(){
+                    return store.state.numero;
+                }
+                */
+            },
+            methods:{
+                ...Vuex.mapActions(['obtenerNombre']),
+            }
+        });
+
+
+
+        Vue.component('hijo',{
+            template : `
+            <div>
+                <h2>Numero Hijo{{ numero }}</h2>
+                <button @click="incremento()">+</button>
+                <button @click="disminuir(4)">-</button> 
+                <button @click="obtenerCursos()">Cursos</button> 
+                
+
+                <ul  v-for="curso of listaCursos">
+                    <li>{{ curso.nombre }}</li>
+                </ul>
+
+                
+
+               
+            </div>
+
+            `,
+            computed:{
+                ...Vuex.mapState(['numero','listaCursos'])
+            },methods: {
+                ...Vuex.mapMutations(['incremento','disminuir']),
+                ...Vuex.mapActions(['obtenerCursos','obtenerNombre']),
+                
+            },
+            created() {
+                this.obtenerNombre();
+            },
+
+        });
+
+
+        const store = new Vuex.Store({
+            state: {
+                numero: 10,
+                listaCursos : [],
+                listaPersonas:[]
+            },
+            mutations: {
+                incremento(state) {
+                    state.numero++;
+                },
+                disminuir(state,n){
+                    state.numero -= n;
+                },
+                llenarcursos(state,cursosAccion){
+                    state.listaCursos = cursosAccion;
+                },
+                llenarPersonas(state,personasJson){
+                    state.listaPersonas = personasJson;
+                }
+            },
+            actions:{
+                obtenerCursos:async function ({ commit }){
+                    const data = await fetch('curso.json');
+                    const cursos = await data.json();
+                    commit('llenarcursos',cursos);
+                },
+                obtenerNombre :async function( { commit }){
+                    const data = await fetch('personas.json');
+                    const personas = await data.json();
+                    commit('llenarPersonas',personas);
+                } 
+            }
+        });
+
+
+
+
+    new Vue({
+        el:"#app",
+        store:store
+    })
+    </script>
+    
+</body>
+</html>

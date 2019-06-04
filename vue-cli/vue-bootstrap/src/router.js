@@ -22,20 +22,14 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
-      path: '/servicios',
-      name: 'servicios',
-      component: () => import(/* webpackChunkName: "servicios" */ './views/Servicios.vue')
+      path: '/grid',
+      name: 'grid',
+      component: () => import(/* webpackChunkName: "about" */ './views/Grid.vue')
     },
     {
-      path: '/fotos/:id',
-      name: 'fotos',
-      component: () => import(/* webpackChunkName: "fotos" */ './views/Fotos.vue')
-    }
-    ,
-    {
-      path: '/fotos',
-      name: 'fotos',
-      component: () => import(/* webpackChunkName: "fotos" */ './views/Fotos.vue')
+      path: '/card',
+      name: 'card',
+      component: () => import(/* webpackChunkName: "card" */ './views/Card.vue')
     }
   ]
 })
